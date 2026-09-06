@@ -4,7 +4,7 @@ const app = express()
 const authRouter = require('./routes/authRouter')
 
 
-
+app.use(express.json())
 
 // main route
 app.use('/api/v1/auth' ,authRouter)
