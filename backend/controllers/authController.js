@@ -1,4 +1,5 @@
 const AllUser = require('../models/userSchema')
+const bcrypt = require('bcrypt')
 
 const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 // const PasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
@@ -8,11 +9,25 @@ let registrationController = async(req,res)=>{
 
     let existingUser = await AllUser.findOne({email:email})
 
+        if(existingUser){
+            return res.status(400).json({
+              success:false,
+              message:"Email Already Exists "
+        })         
+    }
+
         if(!Fullname || !email || !password || !terms){
             return res.status(400).json({
               success:false,
               message:"To Process Furthur , Please Fill all the Fields "
         })
+    }
+    
+         if(!EmailRegex.test(email)){
+            return res.status(400).json({
+              success:false,
+              message:"Please Enter a valid Email ! "
+        })            
     }
 
         if(password !== confirmPassword){
@@ -22,12 +37,8 @@ let registrationController = async(req,res)=>{
         })
     }
 
-         if(!EmailRegex.test(email)){
-            return res.status(400).json({
-              success:false,
-              message:"Please Enter a valid Email ! "
-        })            
-    }
+    const hash = bcrypt.hashSync(password, 10);
+
 
     //      if(!PasswordRegex.test(password)){
     //         return res.status(400).json({
@@ -41,15 +52,18 @@ let registrationController = async(req,res)=>{
       const user = new AllUser({
         Fullname:Fullname,
         email:email,
-        password:password,
+        password:hash,
         terms:terms
       })
-await user.save();
+
+
+    await user.save();
 
         return res.status(201).json({
             success: true,
             message: "User registered successfully!"
-        });}
+        });
+    }
 
 
 module.exports = { registrationController }
