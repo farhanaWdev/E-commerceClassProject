@@ -6,7 +6,7 @@ const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 let registrationController = async(req,res)=>{
     const{Fullname ,email,password ,confirmPassword,terms}=req.body
 
-    let existingUser = await AllUser.findone({email:email})
+    let existingUser = await AllUser.findOne({email:email})
 
         if(!Fullname || !email || !password || !terms){
             return res.status(400).json({
@@ -38,8 +38,18 @@ let registrationController = async(req,res)=>{
 
     // ---sudu bad request ashtese FUCKK ---gotta change this regex !!!!!!!
 
+      const user = new AllUser({
+        fullname:Fullname,
+        email:email,
+        password:password,
+        terms:terms
+      })
+await user.save();
 
-}
+        return res.status(201).json({
+            success: true,
+            message: "User registered successfully!"
+        });}
 
 
-module.exports = registrationController
+module.exports = { registrationController }
