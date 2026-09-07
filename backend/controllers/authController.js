@@ -39,7 +39,7 @@ let registrationController = async(req,res)=>{
     // ---sudu bad request ashtese FUCKK ---gotta change this regex !!!!!!!
 
       const user = new AllUser({
-        fullname:Fullname,
+        Fullname:Fullname,
         email:email,
         password:password,
         terms:terms
