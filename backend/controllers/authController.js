@@ -1,5 +1,6 @@
 const AllUser = require('../models/userSchema')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 // const PasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
@@ -56,6 +57,16 @@ let registrationController = async(req,res)=>{
         terms:terms
       })
 
+
+    // checking email verification
+    let verificationToken = jwt.sign({
+        _id: user._id,
+        email: user.email,
+        role: user.role
+    },'abcdefgh',{
+        expiresIn:'10d'
+    })
+       console.log(verificationToken)
 
     await user.save();
 
