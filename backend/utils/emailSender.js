@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { getMaxListeners } = require("../models/userSchema");
+// const { getMaxListeners } = require("../models/userSchema");
 
 // Create a transporter using SMTP
 const transporter = nodemailer.createTransport({
