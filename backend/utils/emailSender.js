@@ -4,6 +4,7 @@ const { getMaxListeners } = require("../models/userSchema");
 // Create a transporter using SMTP
 const transporter = nodemailer.createTransport({
   services: "gmail",
+  port:587,
   secure: false, 
   auth: {
     user:' process.env.NODEMAILER_EMAIL',
