@@ -3,12 +3,12 @@ const nodemailer = require("nodemailer");
 
 // Create a transporter using SMTP
 const transporter = nodemailer.createTransport({
-  services: "gmail",
+  service: "gmail",
   port:587,
   secure: false, 
   auth: {
-    user:' process.env.NODEMAILER_EMAIL',
-    pass:' process.env.NODEMAILER_PASSWORD',
+    user: process.env.NODEMAILER_EMAIL,
+    pass: process.env.NODEMAILER_PASSWORD,
   },
 });
 
@@ -18,7 +18,7 @@ async function verificationEmail(email,token){
           from: 'farha168na@gmail.com', 
           to: email, 
           subject: "Please Verify Your Email", 
-          html: '<b>Please verify your email to unlock full access . Kindly Click Here to Procced <a href="http://localhost:5173/verify/${token}">There you go</a> </b>',
+          html: `<b>Please verify your email to unlock full access . Kindly Click Here to Procced <a href="http://localhost:5173/verify/${token}">There you go</a> </b>`,
     });
 
   console.log("Message sent: %s", info.messageId);

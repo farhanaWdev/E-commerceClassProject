@@ -78,4 +78,5 @@ let registrationController = async(req,res)=>{
     }
 
 
+
 module.exports = { registrationController }
