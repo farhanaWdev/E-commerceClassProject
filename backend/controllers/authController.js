@@ -77,6 +77,16 @@ let registrationController = async(req,res)=>{
         });
     }
 
+let loginController = async(req,res)=>{
+    const{email,password}=req.body
+    if(!email){
+        returnres.status(400).json({
+            success:false,
+            message:"Register a New Account"
+        })
+    }
+}
+
 
 
 module.exports = { registrationController }
