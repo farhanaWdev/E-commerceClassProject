@@ -94,7 +94,26 @@ let loginController = async(req,res)=>{
 
     }
 
-  
+ let passCompare = bcrypt.compareSync(password, existingUser.password)
+   if(passCompare){
+    return res.status(200).json({
+        sucess:true,
+        message: "You logged in succesfully",
+        data: {
+          _id: existingUser._id,
+           fullName: existingUser.fullName,
+           email: existingUser.email,
+           role: existingUser.role,
+       }
+    })
+   }else  
+     return res.status(400).json({
+        sucess:true,
+        message: "Create new account",
+
+
+    })
+
 
 }
 
