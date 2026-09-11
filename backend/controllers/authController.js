@@ -79,14 +79,25 @@ let registrationController = async(req,res)=>{
 
 let loginController = async(req,res)=>{
     const{email,password}=req.body
+    const existingUser = await AllUser.findOne({email})
     if(!email){
-        returnres.status(400).json({
+        return res.status(400).json({
             success:false,
             message:"Register a New Account"
         })
     }
+    if(!email || !password){
+        return res.status(400).json({
+        success:false,
+        message:"Please fill all the fields"
+        })
+
+    }
+
+  
+
 }
 
 
 
-module.exports = { registrationController }
+module.exports = { registrationController , loginController }
