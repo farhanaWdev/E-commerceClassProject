@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {verificationEmail} = require('../utils/emailSender')
 const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-// const PasswordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 let registrationController = async(req,res)=>{
     const{Fullname ,email,password ,confirmPassword,terms}=req.body
@@ -40,15 +40,13 @@ let registrationController = async(req,res)=>{
 
     const hash = bcrypt.hashSync(password, 10);
 
+    if(!passwordRegex.test(password)){
+        return res.status(400).json({
+            sucess:false,
+            message:"Use a proper Password"
+        })
+    }
 
-    //      if(!PasswordRegex.test(password)){
-    //         return res.status(400).json({
-    //           success:false,
-    //           message:"Password must contain at least one uppercase letter, one number, and one special character"
-    //     })            
-    // }
-
-    // ---sudu bad request ashtese FUCKK ---gotta change this regex !!!!!!!
 
       const user = new AllUser({
         Fullname:Fullname,
@@ -63,7 +61,7 @@ let registrationController = async(req,res)=>{
         _id: user._id,
         email: user.email,
         role: user.role
-    },'abcdefgh',{
+    },process.env.JWT_VERIFY_SECRET,{
         expiresIn:'10d'
     })
 
@@ -110,13 +108,21 @@ let loginController = async(req,res)=>{
      return res.status(400).json({
         sucess:true,
         message: "Create new account",
-
-
     })
 
 
+    }
+
+let verifyEmailController =  async(req,res)=>{
+    let {token} = req.params
+    var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
+    await AllUser.findByIdAndUpdate({_id:decoded._id} , {isVerified:true})
+    
+     res.status(200).json({
+        sucess:true,
+        message: "Email verified",
+    })
 }
 
 
-
-module.exports = { registrationController , loginController }
+module.exports = { registrationController , loginController , verifyEmailController }
