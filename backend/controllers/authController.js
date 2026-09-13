@@ -2,11 +2,11 @@ const AllUser = require('../models/userSchema')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {verificationEmail} = require('../utils/emailSender')
-const EmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 let registrationController = async(req,res)=>{
-    const{Fullname ,email,password ,confirmPassword,terms}=req.body
+    const{fullname ,email,password ,confirmPassword,terms}=req.body
 
     let existingUser = await AllUser.findOne({email:email})
 
@@ -17,14 +17,14 @@ let registrationController = async(req,res)=>{
         })         
     }
 
-        if(!Fullname || !email || !password || !terms){
+        if(!fullname || !email || !password || !terms){
             return res.status(400).json({
               success:false,
               message:"To Process Furthur , Please Fill all the Fields "
         })
     }
     
-         if(!EmailRegex.test(email)){
+         if(!emailRegex.test(email)){
             return res.status(400).json({
               success:false,
               message:"Please Enter a valid Email ! "
@@ -49,7 +49,7 @@ let registrationController = async(req,res)=>{
 
 
       const user = new AllUser({
-        Fullname:Fullname,
+        fullname:fullname,
         email:email,
         password:hash,
         terms:terms
@@ -107,7 +107,7 @@ let loginController = async(req,res)=>{
    }else  
      return res.status(400).json({
         sucess:true,
-        message: "Create new account",
+        message: "Password didn't match",
     })
 
 
