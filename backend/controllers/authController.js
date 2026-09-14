@@ -46,15 +46,12 @@ let registrationController = async(req,res)=>{
             message:"Use a proper Password"
         })
     }
-
-
       const user = new AllUser({
         fullname:fullname,
         email:email,
         password:hash,
         terms:terms
       })
-
 
     // checking email verification
     let verificationToken = jwt.sign({
@@ -66,9 +63,7 @@ let registrationController = async(req,res)=>{
     })
 
     verificationEmail(email,verificationToken)
-
     await user.save();
-
         return res.status(201).json({
             success: true,
             message: "User registered successfully!"
@@ -89,11 +84,17 @@ let loginController = async(req,res)=>{
         success:false,
         message:"Please fill all the fields"
         })
-
     }
 
  let passCompare = bcrypt.compareSync(password, existingUser.password)
    if(passCompare){
+    let accessToken = jwt.sign({
+        _id: existingUser._id,
+        email: existingUser.email,
+        role: existingUser.role
+    },process.env.JWT_VERIFY_SECRET,{
+        expiresIn:'40d'
+    })
     return res.status(200).json({
         sucess:true,
         message: "You logged in succesfully",
@@ -102,22 +103,19 @@ let loginController = async(req,res)=>{
            fullName: existingUser.fullName,
            email: existingUser.email,
            role: existingUser.role,
-       }
+       },accessToken : accessToken
     })
    }else  
      return res.status(400).json({
         sucess:true,
         message: "Password didn't match",
     })
-
-
     }
 
 let verifyEmailController =  async(req,res)=>{
     let {token} = req.params
     var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
     await AllUser.findByIdAndUpdate({_id:decoded._id} , {isVerified:true})
-    
      res.status(200).json({
         sucess:true,
         message: "Email verified",
