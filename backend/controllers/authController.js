@@ -1,7 +1,7 @@
 const AllUser = require('../models/userSchema')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {verificationEmail} = require('../utils/emailSender')
+const {verificationEmail, forgotPasswordEmail} = require('../utils/emailSender')
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -74,7 +74,7 @@ let loginController = async(req,res)=>{
     const{email,password}=req.body
     
     const existingUser = await AllUser.findOne({email})
-    if(!email){
+    if(!existingUser){
         return res.status(400).json({
             success:false,
             message:"Register a New Account"
@@ -115,7 +115,9 @@ let loginController = async(req,res)=>{
 
 let verifyEmailController =  async(req,res)=>{
     let {token} = req.params
+
     var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
+
     await AllUser.findByIdAndUpdate({_id:decoded._id} , {isVerified:true})
      res.status(200).json({
         sucess:true,
@@ -123,5 +125,27 @@ let verifyEmailController =  async(req,res)=>{
     })
 }
 
+let forgotPasswordController = async (req,res)=>{
+    let{email}= req.body
+    let existingUser = await AllUser.findOne({email:email})
+      if(!existingUser){
+        return res.status(400).json({
+            success:false,
+            message:"User not found"
+        })
+    }
 
-module.exports = { registrationController , loginController , verifyEmailController }
+        let forgotPassToken = jwt.sign({
+        _id: existingUser._id,
+        email: existingUser.email,
+    },process.env.JWT_VERIFY_SECRET,{
+        expiresIn:'10d'
+    })
+
+    forgotPasswordEmail(email,token)
+    
+
+}
+
+
+module.exports = { registrationController , loginController , verifyEmailController, forgotPasswordController }

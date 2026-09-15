@@ -28,6 +28,22 @@ async function verificationEmail(email,token){
 }
 }
 
+async function forgotPasswordEmail(email,token){
+    try {
+      const info = await transporter.sendMail({
+          from: 'farha168na@gmail.com', 
+          to: email, 
+          subject: "Reset Pass", 
+          html: `<b> Kindly Click Here to Procced <a href="http://localhost:5173/verify/${token}">There you go</a> </b>`,
+    });
+
+  console.log("Message sent: %s", info.messageId);
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+} catch (err) {
+  console.error("Error while sending mail:", err);
+}
+}
+
 // wltm uyvf gxov wwyd
 
-module.exports = {verificationEmail}
+module.exports = {verificationEmail , forgotPasswordEmail}
