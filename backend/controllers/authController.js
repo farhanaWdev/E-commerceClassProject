@@ -126,8 +126,11 @@ let verifyEmailController =  async(req,res)=>{
 }
 
 let forgotPasswordController = async (req,res)=>{
+
     let{email}= req.body
+
     let existingUser = await AllUser.findOne({email:email})
+
       if(!existingUser){
         return res.status(400).json({
             success:false,
@@ -142,7 +145,11 @@ let forgotPasswordController = async (req,res)=>{
         expiresIn:'10d'
     })
 
-    forgotPasswordEmail(email,token)
+    forgotPasswordEmail(email,forgotPassToken)
+    res.status(200).json({
+            success:false,
+            message:"Reset Password Link has been sent to your Email"
+        })
     
 
 }
