@@ -33,7 +33,7 @@ async function forgotPasswordEmail(email,token){
       const info = await transporter.sendMail({
           from: 'farha168na@gmail.com', 
           to: email, 
-          subject: "Reset Pass", 
+          subject: "Forgot Pass", 
           html: `<b> Kindly Click Here to Procced <a href="http://localhost:5173/verify/${token}">There you go</a> </b>`,
     });
 

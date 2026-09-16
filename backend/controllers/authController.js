@@ -145,14 +145,47 @@ let forgotPasswordController = async (req,res)=>{
         expiresIn:'10d'
     })
 
-    forgotPasswordEmail(email,forgotPassToken)
     res.status(200).json({
-            success:false,
-            message:"Reset Password Link has been sent to your Email"
-        })
+    success: true, 
+    message: "Forgot Password Link has been sent to your Email"
+    })
     
 
 }
+let ResetPasswordController = async (req,res)=>{
+
+    let{token}= req.params
+    let{newPassword,confirmPassword}= req.body
+
+    var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
+
+    let existingUser = await AllUser.findOne({email:email})
+
+      if(!existingUser){
+        return res.status(400).json({
+            success:false,
+            message:"User not found"
+        })
+    }
+
+    //     let resetPasswordToken = jwt.sign({
+    //     _id: existingUser._id,
+    //     email: existingUser.email,
+    // },process.env.JWT_VERIFY_SECRET,{
+    //     expiresIn:'10d'
+    // })
+
+    // forgotPasswordEmail(email,resetPasswordToken)
+    // res.status(200).json({
+    //         success:false,
+    //         message:"Reset Password Link has been sent to your Email"
+    //     })
+    
+    }
 
 
-module.exports = { registrationController , loginController , verifyEmailController, forgotPasswordController }
+module.exports = { registrationController , loginController , verifyEmailController, forgotPasswordController, ResetPasswordController }
+
+
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YWE5YjBlOTM2ODQ3N2RlMDIyZmNhOTEiLCJlbWFpbCI6ImZhcmhhMTY4bmFAZ21haWwuY29tIiwiaWF0IjoxNzg5NTc1ODk1LCJleHAiOjE3OTA0Mzk4OTV9.qsddD5E0dF5odKXa1t374tkBymmwBzBd5D1tjCn4jwM
