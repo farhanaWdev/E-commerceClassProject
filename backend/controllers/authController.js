@@ -149,9 +149,9 @@ let forgotPasswordController = async (req,res)=>{
     success: true, 
     message: "Forgot Password Link has been sent to your Email"
     })
-    
 
 }
+
 let ResetPasswordController = async (req,res)=>{
 
     let{token}= req.params
@@ -159,31 +159,24 @@ let ResetPasswordController = async (req,res)=>{
 
     var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
 
-    console.log(decoded)
+     if(decoded){
+        if(newPassword === confirmPassword){
+            const hash = bcrypt.hashSync(newPassword,10);
+            await AllUser.findByIdAndUpdate({_id:decoded._id},{password:hash})
+          return res.status(200).json({
+            success:true,
+            message:"Password update done"
+        })        
+     }else{
+           return res.status(400).json({
+            success:false,
+            message:"Password not matched"
+        }) 
 
-    // let existingUser = await AllUser.findOne({email:email})
+     }
 
-    //   if(!existingUser){
-    //     return res.status(400).json({
-    //         success:false,
-    //         message:"User not found"
-    //     })
-    // }
-
-    //     let resetPasswordToken = jwt.sign({
-    //     _id: existingUser._id,
-    //     email: existingUser.email,
-    // },process.env.JWT_VERIFY_SECRET,{
-    //     expiresIn:'10d'
-    // })
-
-    // forgotPasswordEmail(email,resetPasswordToken)
-    // res.status(200).json({
-    //         success:false,
-    //         message:"Reset Password Link has been sent to your Email"
-    //     })
-    
     }
+}
 
 
 module.exports = { registrationController , loginController , verifyEmailController, forgotPasswordController, ResetPasswordController }
