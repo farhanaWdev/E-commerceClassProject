@@ -159,14 +159,16 @@ let ResetPasswordController = async (req,res)=>{
 
     var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
 
-    let existingUser = await AllUser.findOne({email:email})
+    console.log(decoded)
 
-      if(!existingUser){
-        return res.status(400).json({
-            success:false,
-            message:"User not found"
-        })
-    }
+    // let existingUser = await AllUser.findOne({email:email})
+
+    //   if(!existingUser){
+    //     return res.status(400).json({
+    //         success:false,
+    //         message:"User not found"
+    //     })
+    // }
 
     //     let resetPasswordToken = jwt.sign({
     //     _id: existingUser._id,
