@@ -163,19 +163,18 @@ let ResetPasswordController = async (req,res)=>{
         if(newPassword === confirmPassword){
             const hash = bcrypt.hashSync(newPassword,10);
             await AllUser.findByIdAndUpdate({_id:decoded._id},{password:hash})
-          return res.status(200).json({
-            success:true,
-            message:"Password update done"
-        })        
+              
      }else{
            return res.status(400).json({
             success:false,
             message:"Password not matched"
         }) 
-
      }
-
     }
+      return res.status(200).json({
+            success:true,
+            message:"Password update done"
+        })  
 }
 
 
