@@ -106,6 +106,7 @@ if (!deletedUser) {
 
 module.exports = {
   allusersControler,
+  deleteUserController,
   singleUser,
   activeUser,
   deactiveUser,
