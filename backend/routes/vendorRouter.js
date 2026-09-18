@@ -4,7 +4,7 @@ const { vendorController } = require('../controllers/vendorController');
 const _ = express.Router();
 
 // All Controllers
-_.post('/create/product', );
+_.post('/create/product', vendorController );
 
 
 module.exports = _;
