@@ -14,11 +14,17 @@ const vendorRouter = require('./routes/vendorRouter');
 const dbConfig = require('./config/dbConfig');
 const { vendorMiddleware, adminMiddleware, userMiddleware } = require('./middlewares/roleMiddlewares');
 
+// swagger config
+const swaggerDocs = require('./config/swagger');
+
 // Connect to Database
 dbConfig();
 
 // Middleware
 app.use(express.json());
+
+// swagger init
+swaggerDocs(app);
 
 // Main Routes
 app.use('/api/v1/auth', authRouter);
