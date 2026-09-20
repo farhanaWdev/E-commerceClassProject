@@ -25,14 +25,17 @@ let createCategory = async(req,res)=>{
    
 
 }
+
 let getAllCategory = async(req,res)=>{
+    
     let category = await category.find({})
 
     res.status(200).json({
         success:true,
         message:"All Category",
         data: category
-    })}
+    })
+}
 
 module.exports = {userController,createCategory,getAllCategory}
 

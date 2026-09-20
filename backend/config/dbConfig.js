@@ -7,4 +7,5 @@ const mongoose = require('mongoose')
        console.log("Database connection Error: ", err)
 })
 }
+
 module.exports = dbConfig
