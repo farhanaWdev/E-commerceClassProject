@@ -33,7 +33,7 @@ let getAllCategory = async(req,res)=>{
     })
 }
 
-module.exports = {userController,createCategory,getAllCategory}
+module.exports = {createCategory,getAllCategory}
 
 
 

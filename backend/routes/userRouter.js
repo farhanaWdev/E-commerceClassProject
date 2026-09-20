@@ -1,5 +1,5 @@
 const express = require('express');
-const { userController, createCategory, getAllCategory } = require('../controllers/userController');
+const { createCategory, getAllCategory } = require('../controllers/userController');
 const _ = express.Router();
 
 /**
