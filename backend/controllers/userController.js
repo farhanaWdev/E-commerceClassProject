@@ -1,9 +1,5 @@
 const category = require("../models/categorySchema")
 
-let userController  = ()=>{
-    console.log("hello")
-}
-
 let createCategory = async(req,res)=>{
     let{name}=req.body
     let existingName = await category.findOne({name:name.toLowerCase()})
@@ -27,7 +23,7 @@ let createCategory = async(req,res)=>{
 }
 
 let getAllCategory = async(req,res)=>{
-    
+
     let category = await category.find({})
 
     res.status(200).json({
