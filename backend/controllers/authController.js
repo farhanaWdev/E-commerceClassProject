@@ -16,7 +16,6 @@ let registrationController = async(req,res)=>{
               message:"Email Already Exists "
         })         
     }
-
         if(!fullname || !email || !password || !terms){
             return res.status(400).json({
               success:false,

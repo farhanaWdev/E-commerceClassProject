@@ -71,8 +71,10 @@ let updateCategory = async (req, res) => {
 
 let deleteCategory = async(req,res)=>{
       let { id } = req.params;
-let deletedCategory = await Category.findByIdAndDelete(id)
-if (!deletedCategory) {
+
+     let deletedCategory = await Category.findByIdAndDelete(id)
+
+     if (!deletedCategory) {
             return res.status(404).json({
                 success: false,
                 message: "category not found"
@@ -83,12 +85,15 @@ if (!deletedCategory) {
             success: true,
             message: "category deleted successfully"
         });
-}
+};
 
 let deleteUserController = async(req,res)=>{
+
           let { id } = req.params;
-let deletedUser = await AllUser.findByIdAndDelete(id)
-if (!deletedUser) {
+
+  let deletedUser = await AllUser.findByIdAndDelete(id)
+
+    if (!deletedUser) {
             return res.status(404).json({
                 success: false,
                 message: "user not found"
@@ -100,8 +105,7 @@ if (!deletedUser) {
             message: "user deleted successfully"
         });
 
-}
-
+};
 
 
 module.exports = {
