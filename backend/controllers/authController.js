@@ -76,6 +76,25 @@ let registrationController = async(req,res)=>{
     }
 }
 
+let verifyEmailController = async(req,res)=>{
+    try {
+        let {token} = req.params
+
+        var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
+
+        await AllUser.findByIdAndUpdate({_id:decoded._id} , {isVerified:true})
+        res.status(200).json({
+            sucess:true,
+            message: "Email verified",
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Invalid or expired token"
+        });
+    }
+}
+
 let loginController = async(req,res)=>{
     try {
         const{email,password}=req.body
@@ -124,18 +143,6 @@ let loginController = async(req,res)=>{
             message: " Server Error"
         });
     }
-}
-
-let verifyEmailController =  async(req,res)=>{
-    let {token} = req.params
-
-    var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
-
-    await AllUser.findByIdAndUpdate({_id:decoded._id} , {isVerified:true})
-     res.status(200).json({
-        sucess:true,
-        message: "Email verified",
-    })
 }
 
 let forgotPasswordController = async (req,res)=>{
