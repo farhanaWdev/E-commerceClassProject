@@ -77,47 +77,54 @@ let registrationController = async(req,res)=>{
 }
 
 let loginController = async(req,res)=>{
-    const{email,password}=req.body
-    
-    const existingUser = await AllUser.findOne({email})
-    if(!existingUser){
-        return res.status(400).json({
+    try {
+        const{email,password}=req.body
+        
+        const existingUser = await AllUser.findOne({email})
+        if(!existingUser){
+            return res.status(400).json({
+                success:false,
+                message:"Register a New Account"
+            })
+        }
+        if(!email || !password){
+            return res.status(400).json({
             success:false,
-            message:"Register a New Account"
-        })
-    }
-    if(!email || !password){
-        return res.status(400).json({
-        success:false,
-        message:"Please fill all the fields"
-        })
-    }
+            message:"Please fill all the fields"
+            })
+        }
 
- let passCompare = bcrypt.compareSync(password, existingUser.password)
-   if(passCompare){
-    let accessToken = jwt.sign({
-        _id: existingUser._id,
-        email: existingUser.email,
-        role: existingUser.role
-    },process.env.JWT_VERIFY_SECRET,{
-        expiresIn:'40d'
-    })
-    return res.status(200).json({
-        sucess:true,
-        message: "You logged in succesfully",
-        data: {
-          _id: existingUser._id,
-           fullName: existingUser.fullName,
-           email: existingUser.email,
-           role: existingUser.role,
-       },accessToken : accessToken
-    })
-   }else  
-     return res.status(400).json({
-        sucess:true,
-        message: "Password didn't match",
-    })
+        let passCompare = bcrypt.compareSync(password, existingUser.password)
+        if(passCompare){
+            let accessToken = jwt.sign({
+                _id: existingUser._id,
+                email: existingUser.email,
+                role: existingUser.role
+            },process.env.JWT_VERIFY_SECRET,{
+                expiresIn:'40d'
+            })
+            return res.status(200).json({
+                sucess:true,
+                message: "You logged in succesfully",
+                data: {
+                  _id: existingUser._id,
+                   fullName: existingUser.fullName,
+                   email: existingUser.email,
+                   role: existingUser.role,
+               },accessToken : accessToken
+            })
+        }else  
+            return res.status(400).json({
+                sucess:true,
+                message: "Password didn't match",
+            })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: " Server Error"
+        });
     }
+}
 
 let verifyEmailController =  async(req,res)=>{
     let {token} = req.params
