@@ -6,68 +6,75 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 let registrationController = async(req,res)=>{
-    const{fullname ,email,password ,confirmPassword,terms}=req.body
+    try {
+        const{fullname ,email,password ,confirmPassword,terms}=req.body
 
-    let existingUser = await AllUser.findOne({email:email})
+        let existingUser = await AllUser.findOne({email:email})
 
         if(existingUser){
             return res.status(400).json({
-              success:false,
-              message:"Email Already Exists "
-        })         
-    }
+                success:false,
+                message:"Email Already Exists "
+            })         
+        }
         if(!fullname || !email || !password || !terms){
             return res.status(400).json({
-              success:false,
-              message:"To Process Furthur , Please Fill all the Fields "
-        })
-    }
-    
-         if(!emailRegex.test(email)){
+                success:false,
+                message:"To Process Furthur , Please Fill all the Fields "
+            })
+        }
+        
+        if(!emailRegex.test(email)){
             return res.status(400).json({
-              success:false,
-              message:"Please Enter a valid Email ! "
-        })            
-    }
+                success:false,
+                message:"Please Enter a valid Email ! "
+            })            
+        }
 
         if(password !== confirmPassword){
             return res.status(400).json({
-              success:false,
-              message:"Password Mismatch "
+                success:false,
+                message:"Password Mismatch "
+            })
+        }
+
+        const hash = bcrypt.hashSync(password, 10);
+
+        if(!passwordRegex.test(password)){
+            return res.status(400).json({
+                sucess:false,
+                message:"Use a proper Password"
+            })
+        }
+        const user = new AllUser({
+            fullname:fullname,
+            email:email,
+            password:hash,
+            terms:terms
         })
-    }
 
-    const hash = bcrypt.hashSync(password, 10);
-
-    if(!passwordRegex.test(password)){
-        return res.status(400).json({
-            sucess:false,
-            message:"Use a proper Password"
+        // checking email verification
+        let verificationToken = jwt.sign({
+            _id: user._id,
+            email: user.email,
+            role: user.role
+        },process.env.JWT_VERIFY_SECRET,{
+            expiresIn:'10d'
         })
-    }
-      const user = new AllUser({
-        fullname:fullname,
-        email:email,
-        password:hash,
-        terms:terms
-      })
 
-    // checking email verification
-    let verificationToken = jwt.sign({
-        _id: user._id,
-        email: user.email,
-        role: user.role
-    },process.env.JWT_VERIFY_SECRET,{
-        expiresIn:'10d'
-    })
-
-    verificationEmail(email,verificationToken)
-    await user.save();
+        verificationEmail(email,verificationToken)
+        await user.save();
         return res.status(201).json({
             success: true,
             message: "User registered successfully!"
         });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: " Server Error"
+        });
     }
+}
 
 let loginController = async(req,res)=>{
     const{email,password}=req.body
