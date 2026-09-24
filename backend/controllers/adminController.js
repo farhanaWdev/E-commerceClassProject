@@ -13,7 +13,6 @@ let allusersControler = async (req, res) => {
 
 let singleUser = async (req, res) => {
   let { id } = req.params;
-
   let data = await AllUser.findById({ _id: id }).select("-password");
   res.status(200).json({
     success: true,
