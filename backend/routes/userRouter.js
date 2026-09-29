@@ -14,7 +14,7 @@ const _ = express.Router();
  *       200:
  *         description: Success
  */
-_.get('/product', userController);
+// _.get('/product', userController );
 
 /**
  * @swagger

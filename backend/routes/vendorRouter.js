@@ -1,10 +1,10 @@
-const express = require('express');
-const { vendorController } = require('../controllers/vendorController');
+// const express = require('express');
+// const { vendorController } = require('../controllers/vendorController');
 
-const _ = express.Router();
+// const _ = express.Router();
 
-// All Controllers
-_.post('/create/product', vendorController );
+// // All Controllers
+// _.post('/create/product', vendorController );
 
 
-module.exports = _;
+// module.exports = _;
