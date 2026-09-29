@@ -8,11 +8,11 @@ const app = express();
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
 const adminRouter = require('./routes/adminRouter');
-const vendorRouter = require('./routes/vendorRouter');
+// const vendorRouter = require('./routes/vendorRouter');
 
 // Database Configuration
 const dbConfig = require('./config/dbConfig');
-const { vendorMiddleware, adminMiddleware, userMiddleware } = require('./middlewares/roleMiddlewares');
+const {  adminMiddleware, userMiddleware } = require('./middlewares/roleMiddlewares');
 
 // swagger config
 const swaggerDocs = require('./config/swagger');
@@ -30,7 +30,7 @@ swaggerDocs(app);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user',userMiddleware, userRouter);
 app.use('/api/v1/admin',adminMiddleware, adminRouter);
-app.use('/api/v1/vendor',vendorMiddleware, vendorRouter);
+// app.use('/api/v1/vendor',vendorMiddleware, vendorRouter);
 
 // Server Listening
 const port = process.env.PORT || 5000;
