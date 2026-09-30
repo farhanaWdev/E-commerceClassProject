@@ -105,7 +105,8 @@ let deleteCategory = async(req,res)=>{
 
 let deleteUserController = async(req,res)=>{
 
-      let { id } = req.params;
+  try{
+        let { id } = req.params;
 
       let deletedUser = await AllUser.findByIdAndDelete(id)
 
@@ -120,6 +121,12 @@ let deleteUserController = async(req,res)=>{
             success: true,
             message: "user deleted successfully"
         });
+  }catch(error){
+       return res.status(500).json({
+            success: false,
+            message: "Failed to delete"
+        });
+  }
 
 };
 
