@@ -9,14 +9,7 @@ let registrationController = async(req,res)=>{
     try {
         const{fullname ,email,password ,confirmPassword,terms}=req.body
 
-        let existingUser = await AllUser.findOne({email:email})
 
-        if(existingUser){
-            return res.status(400).json({
-                success:false,
-                message:"Email Already Exists "
-            })         
-        }
         if(!fullname || !email || !password || !terms){
             return res.status(400).json({
                 success:false,
@@ -29,6 +22,15 @@ let registrationController = async(req,res)=>{
                 success:false,
                 message:"Please Enter a valid Email ! "
             })            
+        }
+
+     let existingUser = await AllUser.findOne({email:email})
+
+        if(existingUser){
+            return res.status(400).json({
+                success:false,
+                message:"Email Already Exists "
+            })         
         }
 
         if(password !== confirmPassword){
@@ -63,7 +65,9 @@ let registrationController = async(req,res)=>{
         })
 
         verificationEmail(email,verificationToken)
+
         await user.save();
+        
         return res.status(201).json({
             success: true,
             message: "User registered successfully!"
@@ -147,7 +151,8 @@ let loginController = async(req,res)=>{
 
 let forgotPasswordController = async (req,res)=>{
 
-    let{email}= req.body
+  try{
+        let{email}= req.body
 
     let existingUser = await AllUser.findOne({email:email})
 
@@ -169,6 +174,12 @@ let forgotPasswordController = async (req,res)=>{
     success: true, 
     message: "Forgot Password Link has been sent to your Email"
     })
+  }catch(error){
+      return res.status(500).json({
+            success: false,
+            message: "Failed to send"
+        });
+  }
 
 }
 
