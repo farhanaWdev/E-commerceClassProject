@@ -185,7 +185,8 @@ let forgotPasswordController = async (req,res)=>{
 
 let ResetPasswordController = async (req,res)=>{
 
-    let{token}= req.params
+  try{
+        let{token}= req.params
     let{newPassword,confirmPassword}= req.body
 
     var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
@@ -205,7 +206,13 @@ let ResetPasswordController = async (req,res)=>{
       return res.status(200).json({
             success:true,
             message:"Password update done"
-        })  
+        }) 
+  } catch(error){
+      return res.status(500).json({
+            success: false,
+            message: "Failed to Reset"
+        });
+  }
 }
 
 
