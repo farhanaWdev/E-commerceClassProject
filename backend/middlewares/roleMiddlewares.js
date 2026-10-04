@@ -16,22 +16,24 @@ let adminMiddleware = (req, res, next) => {
         next()
     }
 }
-// let vendorMiddleware = (req, res, next) => {
-//     let authorizationToken = req.headers.authorization
 
-//     let token = authorizationToken.split(" ")[1]
+let vendorMiddleware = (req, res, next) => {
+    let authorizationToken = req.headers.authorization
 
-//     var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
+    let token = authorizationToken.split(" ")[1]
 
-//     if (decoded.role !== 'vendor') {
-//         return res.status(401).json({
-//             success: false,
-//             message: "You are not Authorized"
-//         })
-//     }else{
-//         next()
-//     }
-// }
+    var decoded = jwt.verify(token, process.env.JWT_VERIFY_SECRET);
+
+    if (decoded.role !== 'vendor') {
+        return res.status(401).json({
+            success: false,
+            message: "You are not Authorized"
+        })
+    }else{
+        next()
+    }
+}
+
 let userMiddleware = (req, res, next) => {
 
     let authorizationToken = req.headers.authorization

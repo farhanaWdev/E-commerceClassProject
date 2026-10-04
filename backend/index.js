@@ -12,7 +12,7 @@ const vendorRouter = require('./routes/vendorRouter');
 
 // Database Configuration
 const dbConfig = require('./config/dbConfig');
-const {  adminMiddleware, userMiddleware } = require('./middlewares/roleMiddlewares');
+const {  adminMiddleware,vendorMiddleware, userMiddleware } = require('./middlewares/roleMiddlewares');
 
 // swagger config
 const swaggerDocs = require('./config/swagger');
