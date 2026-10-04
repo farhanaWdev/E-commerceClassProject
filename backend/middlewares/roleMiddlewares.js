@@ -58,4 +58,4 @@ let userMiddleware = (req, res, next) => {
         next()
     }
 }
-module.exports = { adminMiddleware  ,userMiddleware}
+module.exports = { adminMiddleware  ,userMiddleware,vendorMiddleware}

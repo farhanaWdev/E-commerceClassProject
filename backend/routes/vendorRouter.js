@@ -1,10 +1,19 @@
 const express = require('express');
-const { vendorController } = require('../controllers/vendorController');
+const { createCategory, getAllCategory, createSubCategoryController, getAllsubCategory, getAllCategoryWisesubCategory, getAllCategoryOWNERWisesubCategory } = require('../controllers/vendorController');
 
 const _ = express.Router();
 
 // All Controllers
-_.post('/create/product', vendorController );
+_.post('/create/category', createCategory );
+_.get('/get', getAllCategory );
+_.post('/create/subcategory', createSubCategoryController );
+_.get('/get/allsubcategory', getAllsubCategory );
+_.get('/get/:id/allsubcategory', getAllCategoryWisesubCategory );
+_.get('/get/:id/allsubcategoryownerwise', getAllCategoryOWNERWisesubCategory );
+
+
+
+
 
 
 module.exports = _;
