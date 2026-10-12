@@ -26,7 +26,10 @@ let createCategory = async(req,res)=>{
 
 let getAllCategory = async(req,res)=>{
 
-    let category = await category.find({}).populate('owner')
+    let category = await category.find({}).populate({
+        path:'owner',
+        select:'-password'
+    })
       res.status(200).json({
         success:true,
         message:"All Category",
